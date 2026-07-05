@@ -1,0 +1,68 @@
+# Complete Clash.Meta / Mihomo Config Example
+# Replace konstantinovandrey with your GitHub username, or use your own domain.
+
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090
+
+# =============================================================================
+# Proxies — add your nodes here
+# =============================================================================
+proxies:
+  - name: "my-server"
+    type: ss
+    server: YOUR_SERVER
+    port: 443
+    cipher: aes-256-gcm
+    password: "YOUR_PASSWORD"
+
+proxy-groups:
+  - name: PROXY
+    type: select
+    proxies:
+      - my-server
+      - DIRECT
+
+  - name: PROXY_AUTO
+    type: url-test
+    proxies:
+      - my-server
+    url: "http://www.gstatic.com/generate_204"
+    interval: 300
+
+# =============================================================================
+# Rule Providers — auto-update from your GitHub Pages
+# =============================================================================
+rule-providers:
+  direct:
+    type: http
+    behavior: classical
+    url: "https://konstantinovandrey.github.io/proxy-rules/clash/direct.yaml"
+    interval: 86400
+    path: ./rules/direct.yaml
+
+  proxy:
+    type: http
+    behavior: classical
+    url: "https://konstantinovandrey.github.io/proxy-rules/clash/proxy.yaml"
+    interval: 86400
+    path: ./rules/proxy.yaml
+
+  reject:
+    type: http
+    behavior: classical
+    url: "https://konstantinovandrey.github.io/proxy-rules/clash/reject.yaml"
+    interval: 86400
+    path: ./rules/reject.yaml
+
+# =============================================================================
+# Rules — evaluated top-to-bottom
+# =============================================================================
+rules:
+  - RULE-SET,reject,REJECT
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,proxy,PROXY
+  - MATCH,PROXY

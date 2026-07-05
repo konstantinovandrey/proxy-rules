@@ -1,0 +1,138 @@
+{
+  // Complete Sing-box Config Example
+  // Replace konstantinovandrey and YOUR_SERVER / PASS with real values.
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 7890,
+      "sniff": true,
+      "sniff_override_destination": true
+    }
+  ],
+
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "select",
+      "outbounds": ["auto", "proxy", "direct"]
+    },
+    {
+      "type": "urltest",
+      "tag": "auto",
+      "outbounds": ["proxy-1", "proxy-2"],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "1m"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "proxy-1",
+      "server": "YOUR_SERVER",
+      "server_port": 443,
+      "method": "2022-blake3-aes-256-gcm",
+      "password": "YOUR_PASSWORD"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "proxy-2",
+      "server": "BACKUP_SERVER",
+      "server_port": 443,
+      "method": "2022-blake3-aes-256-gcm",
+      "password": "YOUR_PASSWORD"
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    },
+    {
+      "type": "dns",
+      "tag": "dns-out"
+    }
+  ],
+
+  "route": {
+    "rule_set": [
+      {
+        "tag": "direct",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/direct.srs",
+        "download_detour": "direct",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "proxy",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/proxy.srs",
+        "download_detour": "direct",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "reject",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/reject.srs",
+        "download_detour": "direct",
+        "update_interval": "24h"
+      },
+      {
+        "tag": "geoip",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "geosite",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db",
+        "download_detour": "direct"
+      }
+    ],
+    "rules": [
+      { "rule_set": "reject", "outbound": "block" },
+      { "rule_set": "direct", "outbound": "direct" },
+      { "rule_set": "proxy",  "outbound": "select" },
+      { "outbound": "select" }
+    ],
+    "auto_detect_interface": true
+  },
+
+  "dns": {
+    "servers": [
+      {
+        "tag": "google",
+        "address": "https://dns.google/dns-query",
+        "detour": "select"
+      },
+      {
+        "tag": "cloudflare",
+        "address": "https://cloudflare-dns.com/dns-query",
+        "detour": "select"
+      },
+      {
+        "tag": "local",
+        "address": "local",
+        "detour": "direct"
+      }
+    ],
+    "rules": [
+      { "rule_set": "geosite", "domain_suffix": ["cn"], "server": "local" },
+      { "rule_set": "geoip",   "geoip": ["cn"],        "server": "local" },
+      { "server": "google" }
+    ],
+    "final": "google"
+  }
+}

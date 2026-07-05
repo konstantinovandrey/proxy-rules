@@ -1,0 +1,59 @@
+{
+  // v2ray / Xray routing rules
+  // Copy this section into your config.json under the "routing" key.
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      // ===== Block ads / tracking / malware =====
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ads",
+          "geosite:category-tracking",
+          "geosite:category-malware"
+        ],
+        "outboundTag": "block"
+      },
+      // ===== Direct: private networks + custom exclusions =====
+      {
+        "type": "field",
+        "domain": [
+          "geosite:private",
+          "geosite:lan",
+          "domain:cardlink.link",
+          "domain:ozon.ru",
+          "domain:localhost"
+        ],
+        "ip": ["geoip:private"],
+        "outboundTag": "direct"
+      },
+      // ===== Proxy: geo-services =====
+      {
+        "type": "field",
+        "domain": [
+          "geosite:google",
+          "geosite:youtube",
+          "geosite:netflix",
+          "geosite:github",
+          "geosite:openai",
+          "geosite:anthropic",
+          "geosite:discord",
+          "geosite:telegram"
+        ],
+        "outboundTag": "proxy"
+      },
+      // ===== CN traffic via direct (geoip) =====
+      {
+        "type": "field",
+        "ip": ["geoip:cn"],
+        "outboundTag": "direct"
+      },
+      // ===== Catch-all =====
+      {
+        "type": "field",
+        "domain": ["geosite:cn"],
+        "outboundTag": "proxy"
+      }
+    ]
+  }
+}

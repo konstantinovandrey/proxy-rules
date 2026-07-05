@@ -2,6 +2,12 @@
 build/
 dist/
 
+# But keep template configs (needed for GitHub Pages deployment)
+!dist/clash/config.yaml
+!dist/sing-box/config.json
+!dist/v2ray/config.json
+!dist/v2ray/routing.json
+
 # Geo databases (downloaded, large)
 *.db
 *.dat

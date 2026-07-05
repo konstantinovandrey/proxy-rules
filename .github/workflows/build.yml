@@ -3,9 +3,6 @@ name: Build Rule Sets
 on:
   push:
     branches: [main]
-    paths:
-      - 'rules/**'
-      - 'scripts/**'
   schedule:
     # Weekly geo database update — Sunday 00:00 UTC
     - cron: '0 0 * * 0'
