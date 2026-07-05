@@ -1,0 +1,6 @@
+# Ad / Tracking / Malware Blocking
+payload:
+  - GEOSITE,CATEGORY-ADS
+  - GEOSITE,CATEGORY-TRACKING
+  - GEOSITE,CATEGORY-MALWARE
+  - GEOSITE,REJECT

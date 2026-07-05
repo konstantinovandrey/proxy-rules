@@ -1,0 +1,24 @@
+# Proxy Rules — Domains that MUST route through proxy
+payload:
+  # === GEOSITE Categories (resolved via geosite.db) ===
+  - GEOSITE,GOOGLE
+  - GEOSITE,YOUTUBE
+  - GEOSITE,NETFLIX
+  - GEOSITE,DISCORD
+  - GEOSITE,TELEGRAM
+  - GEOSITE,GITHUB
+  - GEOSITE,OPENAI
+  - GEOSITE,ANTHROPIC
+  - GEOSITE,TWITTER
+  - GEOSITE,FACEBOOK
+  - GEOSITE,INSTAGRAM
+  - GEOSITE,REDDIT
+
+  # === Country-Based (example: CN traffic through proxy) ===
+  # - GEOSITE,CN
+
+  # === User-Custom Proxy Domains ===
+  # - DOMAIN-SUFFIX,example.com
+
+  # === Catch-All (MUST be last rule) ===
+  - MATCH

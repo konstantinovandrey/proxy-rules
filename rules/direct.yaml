@@ -1,0 +1,68 @@
+# Direct/Exclusion Rules - Clash YAML Format
+# Source of truth — all clients consume this via conversion
+payload:
+  # === Private Networks (RFC1918 + Special) ===
+  - IP-CIDR,10.0.0.0/8
+  - IP-CIDR,172.16.0.0/12
+  - IP-CIDR,192.168.0.0/16
+  - IP-CIDR,127.0.0.0/8
+  - IP-CIDR,169.254.0.0/16  # Link-local
+  - IP-CIDR,::1/128         # IPv6 loopback
+  - IP-CIDR,fe80::/10       # IPv6 link-local
+  - IP-CIDR,fc00::/7        # IPv6 unique local address
+
+  # === Local Domains ===
+  - DOMAIN-SUFFIX,local
+  - DOMAIN-SUFFIX,localhost
+  - DOMAIN-SUFFIX,lan
+  - DOMAIN-SUFFIX,internal
+  - DOMAIN-KEYWORD,intranet
+
+  # === GEOSITE Categories (resolved at runtime via geo databases) ===
+  - GEOSITE,PRIVATE
+  - GEOSITE,LAN
+
+  # === Messengers ===
+  - DOMAIN-SUFFIX,max.ru
+  - DOMAIN-SUFFIX,web.max.ru
+
+  # === Government Services ===
+  - DOMAIN-SUFFIX,gosuslugi.ru
+  - DOMAIN-SUFFIX,esia.gosuslugi.ru
+
+  # === Telecom ===
+  - DOMAIN-SUFFIX,megafon.ru
+
+  # === Banks ===
+  - DOMAIN-SUFFIX,alfabank.ru
+  - DOMAIN-SUFFIX,alfa-bank.ru
+  - DOMAIN-SUFFIX,sberbank.ru
+  - DOMAIN-SUFFIX,sberbank.com
+  - DOMAIN-SUFFIX,sber.ru
+  - DOMAIN-SUFFIX,tbank.ru
+  - DOMAIN-SUFFIX,tinkoff.ru
+
+  # === Retail / Supermarkets ===
+  - DOMAIN-SUFFIX,5ka.ru
+  - DOMAIN-SUFFIX,magnit.ru
+  - DOMAIN-SUFFIX,perekrestok.ru
+  - DOMAIN-SUFFIX,vprok.ru            # Перекрёсток online
+  - DOMAIN-SUFFIX,vkusvill.ru
+  - DOMAIN-SUFFIX,lenta.com           # Супермаркет (не lenta.ru — это новости)
+  - DOMAIN-SUFFIX,gulliver.ru
+
+  # === Yandex (Weather, Maps, Taxi, Market и др.) ===
+  - DOMAIN-SUFFIX,yandex.ru
+  - DOMAIN-SUFFIX,yastatic.net        # Yandex CDN
+
+  # === Also Recommended (популярные сервисы) ===
+  - DOMAIN-SUFFIX,avito.ru
+  - DOMAIN-SUFFIX,wildberries.ru
+  - DOMAIN-SUFFIX,wb.ru
+  - DOMAIN-SUFFIX,vk.com
+  - DOMAIN-SUFFIX,vk.ru
+  - DOMAIN-SUFFIX,mail.ru
+  - DOMAIN-SUFFIX,mts.ru
+  - DOMAIN-SUFFIX,beeline.ru
+  - DOMAIN-SUFFIX,vtb.ru
+  - DOMAIN-SUFFIX,rzd.ru

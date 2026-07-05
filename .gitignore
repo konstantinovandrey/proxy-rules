@@ -1,0 +1,30 @@
+# Build outputs
+build/
+dist/
+
+# Geo databases (downloaded, large)
+*.db
+*.dat
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+.env.local
+
+# Temp
+tmp/
+temp/

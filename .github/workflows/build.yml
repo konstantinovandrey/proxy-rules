@@ -1,0 +1,83 @@
+name: Build Rule Sets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'rules/**'
+      - 'scripts/**'
+  schedule:
+    # Weekly geo database update — Sunday 00:00 UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install sing-box
+        run: |
+          curl -fL -o sing-box.tar.gz \
+            "https://github.com/SagerNet/sing-box/releases/latest/download/sing-box-linux-amd64.tar.gz"
+          tar -xzf sing-box.tar.gz
+          sudo mv sing-box-*/sing-box /usr/local/bin/ || sudo mv sing-box /usr/local/bin/
+          sing-box version
+
+      - name: Build Rule Sets
+        run: ./scripts/build.sh
+
+      - name: Download Geo Databases
+        run: ./scripts/download-geo.sh
+
+      - name: Upload Artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/sing-box/*.srs
+            dist/sing-box/geoip.db
+            dist/sing-box/geosite.db
+            dist/clash/*.yaml
+            dist/v2ray/geoip.dat
+            dist/v2ray/geosite.dat
