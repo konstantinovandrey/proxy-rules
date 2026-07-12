@@ -1,75 +1,25 @@
 {
-    "log": {
-        "level": "info",
-        "timestamp": true
-    },
-    "dns": {
-        "servers": [
-            {
-                "tag": "local-dns",
-                "address": "https://doh.pub/dns-query",
-                "detour": "direct"
-            },
-            {
-                "tag": "remote-dns",
-                "address": "https://dns.google/dns-query",
-                "detour": "proxy"
-            }
-        ],
-        "rules": [
-            {
-                "domain_suffix": [".ru", ".рф"],
-                "server": "local-dns"
-            },
-            {
-                "server": "remote-dns"
-            }
-        ]
-    },
-    "inbounds": [
-        {
-            "type": "mixed",
-            "tag": "mixed-in",
-            "listen": "127.0.0.1",
-            "listen_port": 7890
-        }
-    ],
     "outbounds": [
         {
             "tag": "proxy",
             "type": "trojan",
             "server": "5.187.0.143",
             "server_port": 444,
-            "password": "RE7do6AxvNXq2P7MiYxoYA",
-            "tls": {
-                "enabled": true,
-                "server_name": "5.187.0.143"
-            }
+            "password": "RE7do6AxvNXq2P7MiYxoYA"
         },
         {
             "tag": "direct",
-            "type": "direct",
-            "domain_strategy": "prefer_ipv4"
+            "type": "direct"
         },
         {
             "tag": "block",
             "type": "block"
-        },
-        {
-            "tag": "dns-out",
-            "type": "dns"
         }
     ],
     "route": {
-        "final": "proxy",
-        "auto_detect_interface": true,
         "rules": [
             {
                 "ip_cidr": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "169.254.0.0/16"],
-                "outbound": "direct"
-            },
-            {
-                "domain_suffix": [".local", ".localhost", ".lan", ".internal"],
                 "outbound": "direct"
             },
             {
@@ -78,25 +28,24 @@
             },
             {
                 "domain_suffix": [
-                    "max.ru", "web.max.ru",
                     "gosuslugi.ru", "esia.gosuslugi.ru",
-                    "megafon.ru",
-                    "alfabank.ru", "alfa-bank.ru", "sberbank.ru", "sberbank.com", "sber.ru", "tbank.ru", "tinkoff.ru",
-                    "5ka.ru", "magnit.ru", "perekrestok.ru", "vprok.ru", "vkusvill.ru", "lenta.com", "gulliver.ru",
                     "yandex.ru", "yastatic.net",
+                    "sberbank.ru", "sber.ru", "tbank.ru", "tinkoff.ru",
+                    "alfabank.ru", "alfa-bank.ru",
                     "ozon.ru", "avito.ru", "wildberries.ru", "wb.ru",
                     "vk.com", "vk.ru", "mail.ru",
                     "mts.ru", "beeline.ru", "vtb.ru", "rzd.ru",
-                    "cardlink.ru", "cardlink.link"
+                    "5ka.ru", "magnit.ru", "perekrestok.ru", "vprok.ru", "vkusvill.ru", "lenta.com",
+                    "cardlink.ru", "cardlink.link",
+                    "megafon.ru", "max.ru", "gulliver.ru"
                 ],
                 "outbound": "direct"
             },
             {
                 "domain_suffix": [
-                    ".google.com", ".googleapis.com", ".gvt1.com", ".gvt2.com",
-                    ".youtube.com", ".ytimg.com", ".googlevideo.com",
+                    ".google.com", ".youtube.com", ".googlevideo.com", ".gstatic.com",
                     ".netflix.com", ".nflxvideo.com",
-                    ".discord.com", ".discordapp.com", ".discord.gg",
+                    ".discord.com", ".discordapp.com",
                     ".telegram.org", ".t.me",
                     ".github.com", ".github.io",
                     ".openai.com",
@@ -108,6 +57,8 @@
                 ],
                 "outbound": "proxy"
             }
-        ]
+        ],
+        "final": "proxy",
+        "auto_detect_interface": true
     }
 }
