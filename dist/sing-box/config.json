@@ -1,138 +1,115 @@
 {
-  // Complete Sing-box Config Example
-  // Replace konstantinovandrey and YOUR_SERVER / PASS with real values.
-  "log": {
-    "level": "info",
-    "timestamp": true
-  },
-
-  "inbounds": [
-    {
-      "type": "mixed",
-      "tag": "mixed-in",
-      "listen": "127.0.0.1",
-      "listen_port": 7890,
-      "sniff": true,
-      "sniff_override_destination": true
+    "log": {
+        "level": "info",
+        "timestamp": true
+    },
+    "inbounds": [
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "127.0.0.1",
+            "listen_port": 7890
+        }
+    ],
+    "outbounds": [
+        {
+            "tag": "proxy",
+            "type": "trojan",
+            "server": "5.187.0.143",
+            "server_port": 444,
+            "password": "RE7do6AxvNXq2P7MiYxoYA"
+        },
+        {
+            "tag": "direct",
+            "type": "direct"
+        },
+        {
+            "tag": "block",
+            "type": "block"
+        }
+    ],
+    "route": {
+        "final": "proxy",
+        "auto_detect_interface": true,
+        "rules": [
+            {
+                "port": [135, 137, 138, 139, 5353],
+                "network": "udp",
+                "outbound": "block"
+            },
+            {
+                "ip_cidr": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "169.254.0.0/16"],
+                "outbound": "direct"
+            },
+            {
+                "domain_suffix": [".local", ".localhost", ".lan", ".internal"],
+                "outbound": "direct"
+            },
+            {
+                "domain_suffix": [".ru", ".рф"],
+                "outbound": "direct"
+            },
+            {
+                "domain_suffix": [
+                    "max.ru", "web.max.ru",
+                    "gosuslugi.ru", "esia.gosuslugi.ru",
+                    "megafon.ru",
+                    "alfabank.ru", "alfa-bank.ru", "sberbank.ru", "sberbank.com", "sber.ru", "tbank.ru", "tinkoff.ru",
+                    "5ka.ru", "magnit.ru", "perekrestok.ru", "vprok.ru", "vkusvill.ru", "lenta.com", "gulliver.ru",
+                    "yandex.ru", "yastatic.net",
+                    "ozon.ru", "avito.ru", "wildberries.ru", "wb.ru",
+                    "vk.com", "vk.ru", "mail.ru",
+                    "mts.ru", "beeline.ru", "vtb.ru", "rzd.ru",
+                    "cardlink.ru", "cardlink.link"
+                ],
+                "outbound": "direct"
+            },
+            {
+                "domain_suffix": [".doubleclick.net", ".googlesyndication.com", ".googleadservices.com", ".google-analytics.com"],
+                "outbound": "block"
+            },
+            {
+                "domain_suffix": [
+                    ".google.com", ".googleapis.com", ".gstatic.com",
+                    ".youtube.com", ".ytimg.com",
+                    ".netflix.com", ".nflxvideo.com",
+                    ".discord.com", ".discordapp.com", ".discord.gg",
+                    ".telegram.org", ".t.me",
+                    ".github.com", ".github.io", ".githubusercontent.com",
+                    ".openai.com", ".oaistatic.com",
+                    ".anthropic.com",
+                    ".twitter.com", ".x.com", ".twimg.com",
+                    ".facebook.com", ".fbcdn.net",
+                    ".instagram.com", ".cdninstagram.com",
+                    ".reddit.com", ".redd.it"
+                ],
+                "outbound": "proxy"
+            }
+        ]
+    },
+    "dns": {
+        "servers": [
+            {
+                "tag": "remote",
+                "address": "https://dns.google/dns-query",
+                "detour": "proxy"
+            },
+            {
+                "tag": "local",
+                "address": "local",
+                "detour": "direct"
+            }
+        ],
+        "rules": [
+            {
+                "domain_suffix": ".ru",
+                "server": "local"
+            },
+            {
+                "server": "remote"
+            }
+        ],
+        "final": "remote",
+        "independent_cache": true
     }
-  ],
-
-  "outbounds": [
-    {
-      "type": "selector",
-      "tag": "select",
-      "outbounds": ["auto", "proxy", "direct"]
-    },
-    {
-      "type": "urltest",
-      "tag": "auto",
-      "outbounds": ["proxy-1", "proxy-2"],
-      "url": "http://www.gstatic.com/generate_204",
-      "interval": "1m"
-    },
-    {
-      "type": "shadowsocks",
-      "tag": "proxy-1",
-      "server": "YOUR_SERVER",
-      "server_port": 443,
-      "method": "2022-blake3-aes-256-gcm",
-      "password": "YOUR_PASSWORD"
-    },
-    {
-      "type": "shadowsocks",
-      "tag": "proxy-2",
-      "server": "BACKUP_SERVER",
-      "server_port": 443,
-      "method": "2022-blake3-aes-256-gcm",
-      "password": "YOUR_PASSWORD"
-    },
-    {
-      "type": "direct",
-      "tag": "direct"
-    },
-    {
-      "type": "block",
-      "tag": "block"
-    },
-    {
-      "type": "dns",
-      "tag": "dns-out"
-    }
-  ],
-
-  "route": {
-    "rule_set": [
-      {
-        "tag": "direct",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/direct.srs",
-        "download_detour": "direct",
-        "update_interval": "24h"
-      },
-      {
-        "tag": "proxy",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/proxy.srs",
-        "download_detour": "direct",
-        "update_interval": "24h"
-      },
-      {
-        "tag": "reject",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/reject.srs",
-        "download_detour": "direct",
-        "update_interval": "24h"
-      },
-      {
-        "tag": "geoip",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "geosite",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db",
-        "download_detour": "direct"
-      }
-    ],
-    "rules": [
-      { "rule_set": "reject", "outbound": "block" },
-      { "rule_set": "direct", "outbound": "direct" },
-      { "rule_set": "proxy",  "outbound": "select" },
-      { "outbound": "select" }
-    ],
-    "auto_detect_interface": true
-  },
-
-  "dns": {
-    "servers": [
-      {
-        "tag": "google",
-        "address": "https://dns.google/dns-query",
-        "detour": "select"
-      },
-      {
-        "tag": "cloudflare",
-        "address": "https://cloudflare-dns.com/dns-query",
-        "detour": "select"
-      },
-      {
-        "tag": "local",
-        "address": "local",
-        "detour": "direct"
-      }
-    ],
-    "rules": [
-      { "rule_set": "geosite", "domain_suffix": ["cn"], "server": "local" },
-      { "rule_set": "geoip",   "geoip": ["cn"],        "server": "local" },
-      { "server": "google" }
-    ],
-    "final": "google"
-  }
 }
