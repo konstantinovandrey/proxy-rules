@@ -1,4 +1,16 @@
 {
+    "log": {
+        "level": "info",
+        "timestamp": false
+    },
+    "inbounds": [
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "127.0.0.1",
+            "listen_port": 7890
+        }
+    ],
     "outbounds": [
         {
             "tag": "proxy",
@@ -17,6 +29,8 @@
         }
     ],
     "route": {
+        "final": "proxy",
+        "auto_detect_interface": true,
         "rules": [
             {
                 "ip_cidr": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "169.254.0.0/16"],
@@ -57,8 +71,6 @@
                 ],
                 "outbound": "proxy"
             }
-        ],
-        "final": "proxy",
-        "auto_detect_interface": true
+        ]
     }
 }
