@@ -3,6 +3,29 @@
         "level": "info",
         "timestamp": true
     },
+    "dns": {
+        "servers": [
+            {
+                "tag": "local-dns",
+                "address": "https://doh.pub/dns-query",
+                "detour": "direct"
+            },
+            {
+                "tag": "remote-dns",
+                "address": "https://dns.google/dns-query",
+                "detour": "proxy"
+            }
+        ],
+        "rules": [
+            {
+                "domain_suffix": [".ru", ".рф"],
+                "server": "local-dns"
+            },
+            {
+                "server": "remote-dns"
+            }
+        ]
+    },
     "inbounds": [
         {
             "type": "mixed",
@@ -17,26 +40,30 @@
             "type": "trojan",
             "server": "5.187.0.143",
             "server_port": 444,
-            "password": "RE7do6AxvNXq2P7MiYxoYA"
+            "password": "RE7do6AxvNXq2P7MiYxoYA",
+            "tls": {
+                "enabled": true,
+                "server_name": "5.187.0.143"
+            }
         },
         {
             "tag": "direct",
-            "type": "direct"
+            "type": "direct",
+            "domain_strategy": "prefer_ipv4"
         },
         {
             "tag": "block",
             "type": "block"
+        },
+        {
+            "tag": "dns-out",
+            "type": "dns"
         }
     ],
     "route": {
         "final": "proxy",
         "auto_detect_interface": true,
         "rules": [
-            {
-                "port": [135, 137, 138, 139, 5353],
-                "network": "udp",
-                "outbound": "block"
-            },
             {
                 "ip_cidr": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "169.254.0.0/16"],
                 "outbound": "direct"
@@ -65,51 +92,22 @@
                 "outbound": "direct"
             },
             {
-                "domain_suffix": [".doubleclick.net", ".googlesyndication.com", ".googleadservices.com", ".google-analytics.com"],
-                "outbound": "block"
-            },
-            {
                 "domain_suffix": [
-                    ".google.com", ".googleapis.com", ".gstatic.com",
-                    ".youtube.com", ".ytimg.com",
+                    ".google.com", ".googleapis.com", ".gvt1.com", ".gvt2.com",
+                    ".youtube.com", ".ytimg.com", ".googlevideo.com",
                     ".netflix.com", ".nflxvideo.com",
                     ".discord.com", ".discordapp.com", ".discord.gg",
                     ".telegram.org", ".t.me",
-                    ".github.com", ".github.io", ".githubusercontent.com",
-                    ".openai.com", ".oaistatic.com",
+                    ".github.com", ".github.io",
+                    ".openai.com",
                     ".anthropic.com",
-                    ".twitter.com", ".x.com", ".twimg.com",
-                    ".facebook.com", ".fbcdn.net",
-                    ".instagram.com", ".cdninstagram.com",
-                    ".reddit.com", ".redd.it"
+                    ".twitter.com", ".x.com",
+                    ".facebook.com",
+                    ".instagram.com",
+                    ".reddit.com"
                 ],
                 "outbound": "proxy"
             }
         ]
-    },
-    "dns": {
-        "servers": [
-            {
-                "tag": "remote",
-                "address": "https://dns.google/dns-query",
-                "detour": "proxy"
-            },
-            {
-                "tag": "local",
-                "address": "local",
-                "detour": "direct"
-            }
-        ],
-        "rules": [
-            {
-                "domain_suffix": ".ru",
-                "server": "local"
-            },
-            {
-                "server": "remote"
-            }
-        ],
-        "final": "remote",
-        "independent_cache": true
     }
 }
