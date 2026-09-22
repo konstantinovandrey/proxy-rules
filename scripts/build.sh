@@ -33,7 +33,9 @@ for entry in data.get('payload', []):
     elif t == 'DOMAIN-KEYWORD':   r['domain_keyword'] = [v]
     elif t == 'IP-CIDR':          r['ip_cidr'] = [v]
     elif t == 'IP-CIDR6':         r['ip_cidr'] = [v]
-    # GEOSITE/GEOIP are resolved at runtime via geo databases; skip
+    elif t == 'GEOSITE':          r['geosite'] = [v.lower()]
+    elif t == 'GEOIP':            r['geoip'] = [v.lower()]
+    elif t in ('MATCH',):         continue
     else:                         continue
     rules.append(r)
 with open('$BUILD_DIR/$rule.json', 'w') as f:

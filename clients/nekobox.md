@@ -5,7 +5,7 @@
 1. Open **Nekobox** → **Profiles** tab → tap **+** → **Import from URL**
 2. Paste your Clash config URL:
    ```
-   https://YOUR_USERNAME.github.io/proxy-rules/clash/config.yaml
+   https://konstantinovandrey.github.io/proxy-rules/clash/config.yaml
    ```
 3. Enable **Auto Update** (set interval to 24h)
 4. Tap **Save** — Nekobox will download rules, proxies, and start routing
@@ -30,9 +30,9 @@ If you only need a few exclusions and don't want the full rule set:
 
    | Name | Type | URL | Interval |
    |------|------|-----|----------|
-   | `direct` | `HTTP` | `https://YOUR_USERNAME.github.io/proxy-rules/clash/direct.yaml` | `86400` |
-   | `proxy` | `HTTP` | `https://YOUR_USERNAME.github.io/proxy-rules/clash/proxy.yaml` | `86400` |
-   | `reject` | `HTTP` | `https://YOUR_USERNAME.github.io/proxy-rules/clash/reject.yaml` | `86400` |
+   | `direct` | `HTTP` | `https://konstantinovandrey.github.io/proxy-rules/clash/direct.yaml` | `86400` |
+   | `proxy` | `HTTP` | `https://konstantinovandrey.github.io/proxy-rules/clash/proxy.yaml` | `86400` |
+   | `reject` | `HTTP` | `https://konstantinovandrey.github.io/proxy-rules/clash/reject.yaml` | `86400` |
 
 3. Go to **Rules** → **Add Rule** for each:
 

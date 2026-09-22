@@ -18,14 +18,14 @@ Click **Fork** → your GitHub account → `proxy-rules`.
 
 ### 3. Update placeholder URLs
 
-Search for `YOUR_USERNAME` across these files and replace with your actual GitHub username:
+Search for `konstantinovandrey` across these files and replace with your actual GitHub username:
 
 | File | Replace |
 |------|---------|
-| `dist/clash/config.yaml` | `YOUR_USERNAME` |
-| `dist/sing-box/config.json` | `YOUR_USERNAME` |
+| `dist/clash/config.yaml` | `konstantinovandrey` |
+| `dist/sing-box/config.json` | `konstantinovandrey` |
 | `dist/v2ray/routing.json` | (no change needed) |
-| `clients/*.md` | `YOUR_USERNAME` in URLs |
+| `clients/*.md` | `konstantinovandrey` in URLs |
 
 ### 4. Add your exclusions
 
@@ -56,8 +56,8 @@ After deployment, point your clients here:
 
 | Client | Config URL |
 |--------|------------|
-| **Nekobox / Hidify / Clash.Meta / Mihomo** | `https://YOUR_USERNAME.github.io/proxy-rules/clash/config.yaml` |
-| **Sing-box** | `https://YOUR_USERNAME.github.io/proxy-rules/sing-box/config.json` |
+| **Nekobox / Hidify / Clash.Meta / Mihomo** | `https://konstantinovandrey.github.io/proxy-rules/clash/config.yaml` |
+| **Sing-box** | `https://konstantinovandrey.github.io/proxy-rules/sing-box/config.json` |
 | **v2ray / Xray** | Copy `dist/v2ray/config.json` + `geoip.dat` + `geosite.dat` |
 
 See per-client guides in [`clients/`](./clients/).

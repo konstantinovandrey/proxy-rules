@@ -1,7 +1,22 @@
 {
     "log": {
         "level": "info",
-        "timestamp": false
+        "timestamp": true
+    },
+    "dns": {
+        "servers": [
+            {
+                "type": "https",
+                "tag": "dns-remote",
+                "server": "1.1.1.1",
+                "detour": "proxy"
+            },
+            {
+                "type": "local",
+                "tag": "dns-local"
+            }
+        ],
+        "strategy": "ipv4_only"
     },
     "inbounds": [
         {
@@ -13,69 +28,103 @@
     ],
     "outbounds": [
         {
+            "type": "vless",
             "tag": "proxy",
-            "type": "trojan",
             "server": "plangenservicedomain.online",
             "server_port": 443,
-            "password": "RE7do6AxvNXq2P7MiYxoYA",
+            "uuid": "843b0958-245d-498b-97a2-e20bd47f56c6",
+            "flow": "xtls-rprx-vision",
             "tls": {
                 "enabled": true,
-                "server_name": "plangenservicedomain.online"
+                "server_name": "github.com",
+                "utls": {
+                    "enabled": true,
+                    "fingerprint": "chrome"
+                },
+                "reality": {
+                    "enabled": true,
+                    "public_key": "Lus78npoC_okxDwNKwujJYbAWhuAGeN_L5x_YUW9-3g",
+                    "short_id": "abcdef1234567890"
+                }
             }
         },
         {
-            "tag": "direct",
-            "type": "direct"
+            "type": "direct",
+            "tag": "direct"
         },
         {
-            "tag": "block",
-            "type": "block"
+            "type": "block",
+            "tag": "block"
         }
     ],
     "route": {
         "final": "proxy",
         "auto_detect_interface": true,
+        "default_domain_resolver": "dns-local",
+        "geoip": {
+            "download_url": "https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db",
+            "download_detour": "proxy"
+        },
+        "geosite": {
+            "download_url": "https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db",
+            "download_detour": "proxy"
+        },
+        "rule_set": [
+            {
+                "type": "remote",
+                "tag": "private",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/private.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "reject",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/reject.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "direct",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/direct.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "proxy",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/proxy.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            }
+        ],
         "rules": [
             {
-                "ip_cidr": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8", "169.254.0.0/16"],
-                "outbound": "direct"
+                "rule_set": [
+                    "reject"
+                ],
+                "outbound": "block"
             },
             {
-                "domain_suffix": [".ru", ".рф"],
-                "outbound": "direct"
-            },
-            {
-                "domain_suffix": ["plangenservicedomain.online"],
-                "outbound": "direct"
-            },
-            {
-                "domain_suffix": [
-                    "gosuslugi.ru", "esia.gosuslugi.ru",
-                    "yandex.ru", "yastatic.net",
-                    "sberbank.ru", "sber.ru", "tbank.ru", "tinkoff.ru",
-                    "alfabank.ru", "alfa-bank.ru",
-                    "ozon.ru", "avito.ru", "wildberries.ru", "wb.ru",
-                    "vk.com", "vk.ru", "mail.ru",
-                    "mts.ru", "beeline.ru", "vtb.ru", "rzd.ru",
-                    "5ka.ru", "magnit.ru", "perekrestok.ru", "vprok.ru", "vkusvill.ru", "lenta.com",
-                    "cardlink.ru", "cardlink.link",
-                    "megafon.ru", "max.ru", "gulliver.ru"
+                "rule_set": [
+                    "private"
                 ],
                 "outbound": "direct"
             },
             {
-                "domain_suffix": [
-                    ".google.com", ".youtube.com", ".googlevideo.com", ".gstatic.com",
-                    ".netflix.com", ".nflxvideo.com",
-                    ".discord.com", ".discordapp.com",
-                    ".telegram.org", ".t.me",
-                    ".github.com", ".github.io",
-                    ".openai.com",
-                    ".anthropic.com",
-                    ".twitter.com", ".x.com",
-                    ".facebook.com",
-                    ".instagram.com",
-                    ".reddit.com"
+                "rule_set": [
+                    "direct"
+                ],
+                "outbound": "direct"
+            },
+            {
+                "rule_set": [
+                    "proxy"
                 ],
                 "outbound": "proxy"
             }

@@ -7,7 +7,7 @@ Hidify has native Sing-box support with auto-updating rule sets.
 1. Open **Hidify** → **Settings** → **Import Config** → **From URL**
 2. Paste the Sing-box config URL:
    ```
-   https://YOUR_USERNAME.github.io/proxy-rules/sing-box/config.json
+   https://konstantinovandrey.github.io/proxy-rules/sing-box/config.json
    ```
 3. Enable **Auto Update** (available in the config itself — `update_interval: "24h"`)
 
@@ -18,7 +18,7 @@ Hidify also supports Clash.Meta configs.
 1. **Settings** → **Import Config** → **From URL**
 2. Paste the Clash config URL:
    ```
-   https://YOUR_USERNAME.github.io/proxy-rules/clash/config.yaml
+   https://konstantinovandrey.github.io/proxy-rules/clash/config.yaml
    ```
 
 ## Method 3: Manual Rule Addition

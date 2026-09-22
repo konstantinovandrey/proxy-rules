@@ -3,7 +3,7 @@
 ## Config File
 
 1. Download or copy `dist/sing-box/config.json` to your device
-2. Replace `YOUR_USERNAME`, `YOUR_SERVER`, and `YOUR_PASSWORD` with real values
+2. Replace the `uuid` in the `proxy` outbound with your personal UUID
 3. Run:
 
 ```bash

@@ -1,5 +1,5 @@
 # Hermes Proxy Rules — Clash.Meta / Mihomo / Hiddify
-# Server: Trojan @ plangenservicedomain.online:443
+# Server: VLESS+REALITY+vision @ plangenservicedomain.online:443
 # Auto-updating rules every 24h from GitHub Pages
 
 port: 7890
@@ -36,25 +36,31 @@ dns:
     geoip-code: CN
 
 proxies:
-  - name: "Hermes-Trojan"
-    type: trojan
+  - name: "Hermes-VLESS"
+    type: vless
     server: plangenservicedomain.online
     port: 443
-    password: "RE7do6AxvNXq2P7MiYxoYA"
-    sni: plangenservicedomain.online
+    uuid: "REPLACE-WITH-UUID"
+    flow: xtls-rprx-vision
     udp: true
+    tls: true
+    servername: github.com
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: "Lus78npoC_okxDwNKwujJYbAWhuAGeN_L5x_YUW9-3g"
+      short-id: "abcdef1234567890"
 
 proxy-groups:
   - name: PROXY
     type: select
     proxies:
-      - Hermes-Trojan
+      - Hermes-VLESS
       - DIRECT
 
   - name: AUTO
     type: url-test
     proxies:
-      - Hermes-Trojan
+      - Hermes-VLESS
     url: "http://www.gstatic.com/generate_204"
     interval: 300
 
