@@ -1,5 +1,5 @@
 # Hermes Proxy Rules — Clash.Meta / Mihomo / Hiddify
-# Server: Trojan @ 5.187.0.143:444
+# Server: Trojan @ plangenservicedomain.online:443
 # Auto-updating rules every 24h from GitHub Pages
 
 port: 7890
@@ -38,9 +38,10 @@ dns:
 proxies:
   - name: "Hermes-Trojan"
     type: trojan
-    server: 5.187.0.143
-    port: 444
+    server: plangenservicedomain.online
+    port: 443
     password: "RE7do6AxvNXq2P7MiYxoYA"
+    sni: plangenservicedomain.online
     udp: true
 
 proxy-groups:
@@ -88,6 +89,7 @@ rules:
   - DOMAIN-SUFFIX,local,DIRECT
   - DOMAIN-SUFFIX,localhost,DIRECT
   - DOMAIN-SUFFIX,lan,DIRECT
+  - DOMAIN-SUFFIX,plangenservicedomain.online,DIRECT
   - RULE-SET,reject,REJECT
   - RULE-SET,direct,DIRECT
   - RULE-SET,proxy,PROXY

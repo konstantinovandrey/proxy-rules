@@ -18,6 +18,9 @@ payload:
   - DOMAIN-SUFFIX,internal
   - DOMAIN-KEYWORD,intranet
 
+  # === Proxy Server (own domain — never route through the tunnel) ===
+  - DOMAIN-SUFFIX,plangenservicedomain.online
+
   # === GEOSITE Categories (resolved at runtime via geo databases) ===
   - GEOSITE,PRIVATE
   - GEOSITE,LAN

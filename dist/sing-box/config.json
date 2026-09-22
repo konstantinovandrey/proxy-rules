@@ -15,9 +15,13 @@
         {
             "tag": "proxy",
             "type": "trojan",
-            "server": "5.187.0.143",
-            "server_port": 444,
-            "password": "RE7do6AxvNXq2P7MiYxoYA"
+            "server": "plangenservicedomain.online",
+            "server_port": 443,
+            "password": "RE7do6AxvNXq2P7MiYxoYA",
+            "tls": {
+                "enabled": true,
+                "server_name": "plangenservicedomain.online"
+            }
         },
         {
             "tag": "direct",
@@ -38,6 +42,10 @@
             },
             {
                 "domain_suffix": [".ru", ".рф"],
+                "outbound": "direct"
+            },
+            {
+                "domain_suffix": ["plangenservicedomain.online"],
                 "outbound": "direct"
             },
             {
