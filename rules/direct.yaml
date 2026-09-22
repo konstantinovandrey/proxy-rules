@@ -24,6 +24,7 @@ payload:
   # === GEOSITE Categories (resolved at runtime via geo databases) ===
   - GEOSITE,PRIVATE
   - GEOSITE,LAN
+  - GEOSITE,CATEGORY-RU
 
   # === Messengers ===
   - DOMAIN-SUFFIX,max.ru

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build all rule sets from source YAML
+# Build all rule sets from geosite/geoip categories + custom YAML
 # Requires: sing-box (https://github.com/SagerNet/sing-box)
 #   Install: curl -Lo /tmp/sing-box.tar.gz https://github.com/SagerNet/sing-box/releases/latest/download/sing-box-linux-amd64.tar.gz
 #            tar -xzf /tmp/sing-box.tar.gz && sudo mv sing-box /usr/local/bin/
@@ -11,15 +11,40 @@ ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 RULES_DIR="$ROOT_DIR/rules"
 BUILD_DIR="$ROOT_DIR/build"
 DIST_DIR="$ROOT_DIR/dist"
+GEO_DIR="$BUILD_DIR/geo"
 
-mkdir -p "$BUILD_DIR" "$DIST_DIR/clash" "$DIST_DIR/sing-box" "$DIST_DIR/v2ray"
+mkdir -p "$BUILD_DIR" "$DIST_DIR/clash" "$DIST_DIR/sing-box" "$GEO_DIR"
 
-echo "🔨 Converting YAML → sing-box JSON..."
+echo "🌐 Downloading geo databases (cached in build/geo)..."
 
-for rule in direct proxy reject private; do
-    python3 -c "
-import yaml, json, sys, os
-with open('$RULES_DIR/$rule.yaml') as f:
+if [ ! -f "$GEO_DIR/geosite.db" ]; then
+    curl -fL -o "$GEO_DIR/geosite.db" \
+        "https://github.com/SagerNet/sing-geosite/releases/latest/download/geosite.db"
+fi
+if [ ! -f "$GEO_DIR/geoip.db" ]; then
+    curl -fL -o "$GEO_DIR/geoip.db" \
+        "https://github.com/SagerNet/sing-geoip/releases/latest/download/geoip.db"
+fi
+
+echo ""
+echo "🔨 Building sing-box rule sets (.srs)..."
+
+# 1. Geosite categories → source JSON → binary SRS
+build_geosite () {
+    cat="$1"
+    # Export category to source JSON
+    sing-box geosite export -f "$GEO_DIR/geosite.db" -o "$BUILD_DIR/$cat.json" "$cat"
+    # Compile to binary (small + fast)
+    sing-box rule-set compile -o "$DIST_DIR/sing-box/$cat.srs" "$BUILD_DIR/$cat.json"
+    echo "  ✓ geosite/$cat → $cat.srs"
+}
+
+# 2. Custom domain rules from rules/*.yaml → source JSON → binary SRS
+build_yaml () {
+    rule="$1"
+    python3 - "$RULES_DIR/$rule.yaml" "$BUILD_DIR/$rule.json" <<'PYEOF'
+import yaml, json, sys
+with open(sys.argv[1]) as f:
     data = yaml.safe_load(f)
 rules = []
 for entry in data.get('payload', []):
@@ -33,43 +58,36 @@ for entry in data.get('payload', []):
     elif t == 'DOMAIN-KEYWORD':   r['domain_keyword'] = [v]
     elif t == 'IP-CIDR':          r['ip_cidr'] = [v]
     elif t == 'IP-CIDR6':         r['ip_cidr'] = [v]
-    elif t == 'GEOSITE':          r['geosite'] = [v.lower()]
-    elif t == 'GEOIP':            r['geoip'] = [v.lower()]
-    elif t in ('MATCH',):         continue
+    # GEOSITE/GEOIP live in config route rules via categories (see config.json),
+    # not inside compiled rule sets: sing-box rule-set schema has no geosite/geoip.
+    elif t in ('GEOSITE', 'GEOIP', 'MATCH'):
+        continue
     else:                         continue
     rules.append(r)
-with open('$BUILD_DIR/$rule.json', 'w') as f:
+with open(sys.argv[2], 'w') as f:
     json.dump({'version': 1, 'rules': rules}, f)
-"
-    echo "  ✓ $rule.yaml → $rule.json ($(python3 -c "import json; print(len(json.load(open('$BUILD_DIR/$rule.json'))['rules']))") rules)"
+PYEOF
+    sing-box rule-set compile -o "$DIST_DIR/sing-box/$rule.srs" "$BUILD_DIR/$rule.json"
+    echo "  ✓ rules/$rule.yaml → $rule.srs"
+}
+
+# Geosite categories referenced by config.json
+for cat in category-ru category-ads-all private google gmail youtube telegram github openai anthropic twitter facebook instagram netflix discord reddit; do
+    build_geosite "$cat"
 done
 
-echo ""
-echo "🔨 Compiling JSON → SRS..."
-
+# Custom rule files (domains/IP from YAML)
 for rule in direct proxy reject private; do
-    json_file="$BUILD_DIR/$rule.json"
-    srs_file="$BUILD_DIR/$rule.srs"
-    rules_count=$(python3 -c "import json; print(len(json.load(open('$json_file'))['rules']))")
-    if [ "$rules_count" -eq 0 ]; then
-        echo "  → $rule.srs (empty — skipping)"
-        : > "$srs_file"
-        continue
+    if [ -s "$RULES_DIR/$rule.yaml" ]; then
+        build_yaml "$rule"
     fi
-    echo "  → $rule.json → $rule.srs ($rules_count rules)"
-    sing-box rule-set compile \
-        --output "$srs_file" \
-        "$json_file"
 done
 
-# Copy source YAML to dist/clash
+# Copy source YAML to dist/clash (rule-providers consume these directly)
 cp "$RULES_DIR"/*.yaml "$DIST_DIR/clash/"
-
-# Copy compiled SRS to dist/sing-box
-cp "$BUILD_DIR"/*.srs "$DIST_DIR/sing-box/"
 
 echo ""
 echo "✅ Build complete"
 echo "📦 Output:"
-echo "   Clash YAML:   $DIST_DIR/clash/"
 echo "   Sing-box SRS: $DIST_DIR/sing-box/"
+echo "   Clash YAML:   $DIST_DIR/clash/"
