@@ -66,7 +66,7 @@
                 "type": "remote",
                 "tag": "reject",
                 "format": "binary",
-                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/reject.srs",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/custom-reject.srs",
                 "download_detour": "proxy",
                 "update_interval": "24h"
             },
@@ -82,7 +82,7 @@
                 "type": "remote",
                 "tag": "private",
                 "format": "binary",
-                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/private.srs",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/custom-private.srs",
                 "download_detour": "proxy",
                 "update_interval": "24h"
             },
@@ -98,7 +98,7 @@
                 "type": "remote",
                 "tag": "direct",
                 "format": "binary",
-                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/direct.srs",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/custom-direct.srs",
                 "download_detour": "proxy",
                 "update_interval": "24h"
             },
@@ -106,7 +106,7 @@
                 "type": "remote",
                 "tag": "proxy",
                 "format": "binary",
-                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/proxy.srs",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/custom-proxy.srs",
                 "download_detour": "proxy",
                 "update_interval": "24h"
             },
@@ -115,14 +115,6 @@
                 "tag": "google",
                 "format": "binary",
                 "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/google.srs",
-                "download_detour": "proxy",
-                "update_interval": "24h"
-            },
-            {
-                "type": "remote",
-                "tag": "gmail",
-                "format": "binary",
-                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/gmail.srs",
                 "download_detour": "proxy",
                 "update_interval": "24h"
             },
@@ -240,7 +232,6 @@
                 "rule_set": [
                     "proxy",
                     "google",
-                    "gmail",
                     "youtube",
                     "telegram",
                     "github",

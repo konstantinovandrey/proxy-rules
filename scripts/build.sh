@@ -42,7 +42,8 @@ build_geosite () {
 # 2. Custom domain rules from rules/*.yaml → source JSON → binary SRS
 build_yaml () {
     rule="$1"
-    python3 - "$RULES_DIR/$rule.yaml" "$BUILD_DIR/$rule.json" <<'PYEOF'
+    out="$2"
+    python3 - "$RULES_DIR/$rule.yaml" "$BUILD_DIR/$out.json" <<'PYEOF'
 import yaml, json, sys
 with open(sys.argv[1]) as f:
     data = yaml.safe_load(f)
@@ -67,19 +68,19 @@ for entry in data.get('payload', []):
 with open(sys.argv[2], 'w') as f:
     json.dump({'version': 1, 'rules': rules}, f)
 PYEOF
-    sing-box rule-set compile -o "$DIST_DIR/sing-box/$rule.srs" "$BUILD_DIR/$rule.json"
-    echo "  ✓ rules/$rule.yaml → $rule.srs"
+    sing-box rule-set compile -o "$DIST_DIR/sing-box/$out.srs" "$BUILD_DIR/$out.json"
+    echo "  ✓ rules/$rule.yaml → $out.srs"
 }
 
 # Geosite categories referenced by config.json
-for cat in category-ru category-ads-all private google gmail youtube telegram github openai anthropic twitter facebook instagram netflix discord reddit; do
+for cat in category-ru category-ads-all private google youtube telegram github openai anthropic twitter facebook instagram netflix discord reddit; do
     build_geosite "$cat"
 done
 
-# Custom rule files (domains/IP from YAML)
+# Custom rule files (domains/IP from YAML) → prefixed custom-*
 for rule in direct proxy reject private; do
     if [ -s "$RULES_DIR/$rule.yaml" ]; then
-        build_yaml "$rule"
+        build_yaml "$rule" "custom-$rule"
     fi
 done
 
