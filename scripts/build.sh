@@ -40,36 +40,77 @@ build_geosite () {
 }
 
 # 2. Custom domain rules from rules/*.yaml → source JSON → binary SRS
+#    GEOSITE/GEOIP entries are inlined by exporting the category from the
+#    sing-box geo databases (rule-set schema has no geosite/geoip reference).
 build_yaml () {
     rule="$1"
     out="$2"
-    python3 - "$RULES_DIR/$rule.yaml" "$BUILD_DIR/$out.json" <<'PYEOF'
-import yaml, json, sys
+    PYTHON_BIN="${PYTHON_BIN:-python3}"
+    GEO_DIR="$GEO_DIR" "$PYTHON_BIN" - "$RULES_DIR/$rule.yaml" "$BUILD_DIR/$out.json" "$rule" <<'PYEOF'
+import json
+import os
+import subprocess
+import sys
+
+import yaml
+
+GEO_DIR = os.environ.get("GEO_DIR", "build/geo")
+
+
+def export_rules(db_kind, category, tmp_path):
+    """Export a geosite/geoip category; returns (rules, error_string)."""
+    db = os.path.join(GEO_DIR, f"{db_kind}.db")
+    proc = subprocess.run(
+        ["sing-box", db_kind, "export", "-f", db, "-o", tmp_path, category],
+        capture_output=True, text=True,
+    )
+    if proc.returncode != 0:
+        return None, proc.stderr.strip()
+    with open(tmp_path) as f:
+        return json.load(f).get("rules", []), None
+
+
+rule_name = sys.argv[3]
 with open(sys.argv[1]) as f:
     data = yaml.safe_load(f)
 rules = []
-for entry in data.get('payload', []):
-    parts = entry.split(',', 1)
+for entry in data.get("payload", []):
+    parts = entry.split(",", 1)
     if len(parts) != 2:
         continue
-    t, v = parts
+    t, v = (p.strip() for p in parts)
     r = {}
-    if t == 'DOMAIN-SUFFIX':      r['domain_suffix'] = [v]
-    elif t == 'DOMAIN':           r['domain'] = [v]
-    elif t == 'DOMAIN-KEYWORD':   r['domain_keyword'] = [v]
-    elif t == 'IP-CIDR':          r['ip_cidr'] = [v]
-    elif t == 'IP-CIDR6':         r['ip_cidr'] = [v]
-    # GEOSITE/GEOIP live in config route rules via categories (see config.json),
-    # not inside compiled rule sets: sing-box rule-set schema has no geosite/geoip.
-    elif t in ('GEOSITE', 'GEOIP', 'MATCH'):
+    if t == "DOMAIN-SUFFIX":      r["domain_suffix"] = [v]
+    elif t == "DOMAIN":           r["domain"] = [v]
+    elif t == "DOMAIN-KEYWORD":   r["domain_keyword"] = [v]
+    elif t == "IP-CIDR":          r["ip_cidr"] = [v]
+    elif t == "IP-CIDR6":         r["ip_cidr6"] = [v]
+    elif t == "GEOSITE":
+        tmp = f"{sys.argv[2]}.geosite.tmp.json"
+        got, err = export_rules("geosite", v.lower(), tmp)
+        if got is None:
+            sys.exit(f"ERROR: {rule_name}.yaml: GEOSITE category '{v}' not found in geosite.db\n  {err}")
+        rules.extend(got)
+        continue
+    elif t == "GEOIP":
+        tmp = f"{sys.argv[2]}.geoip.tmp.json"
+        got, err = export_rules("geoip", v.lower(), tmp)
+        if got is None:
+            sys.exit(f"ERROR: {rule_name}.yaml: GEOIP category '{v}' not found in geoip.db\n  {err}")
+        rules.extend(got)
+        continue
+    elif t == "MATCH":
+        print(f"  ⚠ {rule_name}.yaml: MATCH skipped — rule-set schema has no MATCH; "
+              f"catch-all lives in route.final / Clash MATCH rule")
         continue
     else:                         continue
     rules.append(r)
-with open(sys.argv[2], 'w') as f:
-    json.dump({'version': 1, 'rules': rules}, f)
+with open(sys.argv[2], "w") as f:
+    json.dump({"version": 2, "rules": rules}, f)
 PYEOF
     sing-box rule-set compile -o "$DIST_DIR/sing-box/$out.srs" "$BUILD_DIR/$out.json"
-    echo "  ✓ rules/$rule.yaml → $out.srs"
+    size=$(wc -c < "$DIST_DIR/sing-box/$out.srs")
+    echo "  ✓ rules/$rule.yaml → $out.srs ($size bytes)"
 }
 
 # Geosite categories referenced by config.json

@@ -22,8 +22,9 @@ payload:
   - DOMAIN-SUFFIX,plangenservicedomain.online
 
   # === GEOSITE Categories (resolved at runtime via geo databases) ===
+  # NOTE: GEOSITE,LAN — не существует в sing-geosite; локальные домены уже покрыты
+  #       DOMAIN-SUFFIX,lan / private-категорией выше.
   - GEOSITE,PRIVATE
-  - GEOSITE,LAN
   - GEOSITE,CATEGORY-RU
 
   # === Messengers ===

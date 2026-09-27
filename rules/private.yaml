@@ -8,5 +8,5 @@ payload:
   - IP-CIDR,::1/128
   - IP-CIDR,fe80::/10
   - IP-CIDR,fc00::/7
+  # NOTE: GEOSITE,LAN — не существует в sing-geosite (проверено); PRIVATE покрывает локальные TLD
   - GEOSITE,PRIVATE
-  - GEOSITE,LAN

@@ -1,6 +1,7 @@
 # Ad / Tracking / Malware Blocking
+# Categories exist in sing-geosite (category-ads-all also covers tracking/analytics).
+# NOTE: category-tracking / category-malware / reject are NOT sing-geosite categories —
+#       category-ads-all is the superset that includes ads + tracking + malware-like domains.
 payload:
   - GEOSITE,CATEGORY-ADS
-  - GEOSITE,CATEGORY-TRACKING
-  - GEOSITE,CATEGORY-MALWARE
-  - GEOSITE,REJECT
+  - GEOSITE,CATEGORY-ADS-ALL
