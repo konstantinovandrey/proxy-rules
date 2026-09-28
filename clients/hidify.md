@@ -1,17 +1,22 @@
 # Hidify Setup
 
+> **Privacy:** profile configs contain your server UUID (your proxy credential).
+> Do NOT publish them on public repositories. Download your personal config
+> file once (via chat / secure transfer) and import it into Hidify — the
+> rule sets themselves auto-update every 24h from GitHub Pages via `rule_set`
+> URLs inside the config, so you never need to re-import.
+
 ## Method 1: Sing-box Config Import (Best)
 
 Hidify has native Sing-box support with auto-updating rule sets.
 
-1. Open **Hidify** → **Settings** → **Import Config** → **From URL**
-2. Paste the Sing-box config URL for your device:
-   ```
-   https://konstantinovandrey.github.io/proxy-rules/sing-box/config-andrey-mobile.json   (Andrey — phone)
-   https://konstantinovandrey.github.io/proxy-rules/sing-box/config-dasha-mobile.json    (Dasha — phone)
-   https://konstantinovandrey.github.io/proxy-rules/sing-box/config.json                 (Desktop / PC)
-   ```
-3. Enable **Auto Update** (available in the config itself — `update_interval: "24h"`)
+1. Receive your personal config file (`config-andrey-mobile.json` /
+   `config-dasha-mobile.json`) via a private channel — do not fetch it from a
+   public URL; it contains your UUID.
+2. Open **Hidify** → **Settings** → **Import Config** → **From File** (or
+   copy the file text and use **From Clipboard**).
+3. The config's `rule_set` entries fetch the rules from GitHub Pages and
+   refresh every 24h (`update_interval: "24h"`) — nothing more to do.
 
 ## Method 2: Clash Config Import
 

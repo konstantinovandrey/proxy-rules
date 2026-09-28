@@ -32,7 +32,7 @@
             "tag": "proxy",
             "server": "plangenservicedomain.online",
             "server_port": 443,
-            "uuid": "843b0958-245d-498b-97a2-e20bd47f56c6",
+            "uuid": "REPLACE-WITH-UUID",
             "flow": "xtls-rprx-vision",
             "tls": {
                 "enabled": true,
