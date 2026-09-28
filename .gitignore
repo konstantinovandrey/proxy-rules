@@ -5,6 +5,8 @@ dist/
 # But keep template configs (needed for GitHub Pages deployment)
 !dist/clash/config.yaml
 !dist/sing-box/config.json
+!dist/sing-box/config-andrey-mobile.json
+!dist/sing-box/config-dasha-mobile.json
 !dist/v2ray/config.json
 !dist/v2ray/routing.json
 

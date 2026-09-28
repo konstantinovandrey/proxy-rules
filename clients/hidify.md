@@ -5,9 +5,11 @@
 Hidify has native Sing-box support with auto-updating rule sets.
 
 1. Open **Hidify** → **Settings** → **Import Config** → **From URL**
-2. Paste the Sing-box config URL:
+2. Paste the Sing-box config URL for your device:
    ```
-   https://konstantinovandrey.github.io/proxy-rules/sing-box/config.json
+   https://konstantinovandrey.github.io/proxy-rules/sing-box/config-andrey-mobile.json   (Andrey — phone)
+   https://konstantinovandrey.github.io/proxy-rules/sing-box/config-dasha-mobile.json    (Dasha — phone)
+   https://konstantinovandrey.github.io/proxy-rules/sing-box/config.json                 (Desktop / PC)
    ```
 3. Enable **Auto Update** (available in the config itself — `update_interval: "24h"`)
 

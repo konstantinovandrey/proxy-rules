@@ -1,0 +1,251 @@
+{
+    "log": {
+        "level": "info",
+        "timestamp": true
+    },
+    "dns": {
+        "servers": [
+            {
+                "type": "https",
+                "tag": "dns-remote",
+                "server": "1.1.1.1",
+                "detour": "proxy"
+            },
+            {
+                "type": "local",
+                "tag": "dns-local"
+            }
+        ],
+        "strategy": "ipv4_only"
+    },
+    "inbounds": [
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "127.0.0.1",
+            "listen_port": 7890
+        }
+    ],
+    "outbounds": [
+        {
+            "type": "vless",
+            "tag": "proxy",
+            "server": "plangenservicedomain.online",
+            "server_port": 443,
+            "uuid": "a4976c07-449e-45ad-b207-1bda8852dab1",
+            "flow": "xtls-rprx-vision",
+            "tls": {
+                "enabled": true,
+                "server_name": "github.com",
+                "utls": {
+                    "enabled": true,
+                    "fingerprint": "chrome"
+                },
+                "reality": {
+                    "enabled": true,
+                    "public_key": "Lus78npoC_okxDwNKwujJYbAWhuAGeN_L5x_YUW9-3g",
+                    "short_id": "abcdef1234567890"
+                }
+            }
+        },
+        {
+            "type": "direct",
+            "tag": "direct"
+        },
+        {
+            "type": "block",
+            "tag": "block"
+        }
+    ],
+    "route": {
+        "final": "proxy",
+        "auto_detect_interface": true,
+        "default_domain_resolver": "dns-local",
+        "rule_set": [
+            {
+                "type": "remote",
+                "tag": "reject",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/custom-reject.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "category-ads-all",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/category-ads-all.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "private",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/custom-private.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "category-ru",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/category-ru.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "direct",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/custom-direct.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "proxy",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/custom-proxy.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "google",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/google.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "youtube",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/youtube.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "telegram",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/telegram.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "github",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/github.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "openai",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/openai.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "anthropic",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/anthropic.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "twitter",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/twitter.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "facebook",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/facebook.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "instagram",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/instagram.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "netflix",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/netflix.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "discord",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/discord.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            },
+            {
+                "type": "remote",
+                "tag": "reddit",
+                "format": "binary",
+                "url": "https://konstantinovandrey.github.io/proxy-rules/sing-box/reddit.srs",
+                "download_detour": "proxy",
+                "update_interval": "24h"
+            }
+        ],
+        "rules": [
+            {
+                "rule_set": [
+                    "reject",
+                    "category-ads-all"
+                ],
+                "outbound": "block"
+            },
+            {
+                "rule_set": [
+                    "private"
+                ],
+                "outbound": "direct"
+            },
+            {
+                "rule_set": [
+                    "category-ru",
+                    "direct"
+                ],
+                "outbound": "direct"
+            },
+            {
+                "rule_set": [
+                    "proxy",
+                    "google",
+                    "youtube",
+                    "telegram",
+                    "github",
+                    "openai",
+                    "anthropic",
+                    "twitter",
+                    "facebook",
+                    "instagram",
+                    "netflix",
+                    "discord",
+                    "reddit"
+                ],
+                "outbound": "proxy"
+            }
+        ]
+    }
+}
