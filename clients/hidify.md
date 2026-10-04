@@ -80,4 +80,4 @@ interface no matter where its traffic is routed, so the app itself has to be
 taken out of the VPN.
 
 One-tap fix (server exit is in Amsterdam), in Russian:
-**[Apps and VPN (Hiddify) ./hiddify-apps.md](./hiddify-apps.md)**
+**[Apps and VPN (Hiddify)](./hiddify-apps.md)**
