@@ -44,3 +44,17 @@
 - **Global Mode** — тогда всё пойдёт через Амстердам и ругаться будут все
   приложения сразу.
 - Не выключай App Routing «на всякий случай» — настройка пропадёт.
+
+---
+
+## Где почитать подробнее
+
+- [Установка и настройка Hiddify на Android (EN)](https://hiddifynext.app/en/guides/android-setup/)
+  — раздел «App Routing (Split Tunneling)», там же про батарею и DNS.
+  Учти: сайт неофициальный, и его русская версия этот раздел не переводит.
+- [Импорт подписки в Hiddify](https://hiddifynext.app/ru/guides/subscription-setup/)
+- [Официальная вики Hiddify на GitHub](https://github.com/hiddify/hiddify-app/wiki/How-to-use-HiddifyNext-app)
+  — официальная, но про подключение и узлы, без per-app.
+
+Про автовыбор по региону (`Auto selection` → `Russia`) в документации не
+написано нигде — это есть только в самом приложении.
