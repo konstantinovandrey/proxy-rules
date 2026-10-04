@@ -69,3 +69,15 @@ If you need DNS routing, add these in **Settings** → **DNS**:
 |--------|------------|
 | `cardlink.link` | `1.1.1.1` |
 | `*.internal` | `192.168.1.1` |
+
+---
+
+## Apps that refuse to work through VPN
+
+Russian apps (Magnit, Gosuslugi, banks) reject foreign IPs and then tell you
+to turn the VPN off. Routing rules cannot fix this: an app sees the VPN
+interface no matter where its traffic is routed, so the app itself has to be
+taken out of the VPN.
+
+One-tap fix (server exit is in Amsterdam), in Russian:
+**[Apps and VPN (Hiddify) ./hiddify-apps.md](./hiddify-apps.md)**
